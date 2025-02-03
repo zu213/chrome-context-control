@@ -1,0 +1,35 @@
+.context-menu {
+    display: none;
+    position: absolute;
+    background: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    min-width: 200px;
+    font-family: Arial, sans-serif;
+    z-index: 10000;
+    user-select: none;
+}
+
+.context-menu ul {
+    list-style: none;
+    padding: 5px 0;
+    margin: 0;
+}
+
+.context-menu .menu-item {
+    padding: 8px 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.context-menu .menu-item:hover {
+    background-color: #f0f0f0;
+}
+
+.context-menu hr {
+    margin: 5px 0;
+    border: none;
+    border-top: 1px solid #ddd;
+}

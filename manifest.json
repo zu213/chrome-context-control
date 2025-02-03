@@ -9,7 +9,9 @@
     },
     "permissions": [
       "contextMenus",
-      "storage"
+      "storage",
+      "clipboardRead",
+      "clipboardWrite"
     ],
     "background": {
         "service_worker": "background.js",
