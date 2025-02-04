@@ -6,7 +6,7 @@
     border-radius: 5px;
     min-width: 200px;
     font-family: Arial, sans-serif;
-    z-index: 10000;
+    z-index: calc(infinity);
     user-select: none;
 }
 
