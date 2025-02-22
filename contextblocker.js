@@ -1,27 +1,37 @@
 
 // Currently stops window from appearing at all.
 var selected = window.getSelection().toString()
-var activeElement = document.activeElement; // Get focused element
+var activeElement = document.activeElement;
 
-document.addEventListener("contextmenu", function (e) {
+async function getStorageValue(key) {
+    return new Promise((resolve, reject) => {
+        chrome.storage.local.get([key], (result) => {
+            if (chrome.runtime.lastError) {
+                reject(chrome.runtime.lastError);
+            } else {
+                resolve(result[key]); // Resolve with the stored value
+            }
+        });
+    });
+}
+
+document.addEventListener("contextmenu", async function (e) {
     e.preventDefault(); // Stop default right-click menu
+    var includedListDetails;
+    includedListDetails = await getStorageValue("chromeContextControlIncluded")
+    console.log(includedListDetails)
+    if(!includedListDetails){
+        includedListDetails = ['Back', 'Forward', 'Reload','Save','Print','Copy','Paste','Source','Inspect'];
+    }
 
     // Add the inital context menu element (this is what will change depending on customisation)
-    const temp = `
-    <div id="customContextMenu" class="context-menu">
-    <ul>
-        <li class="menu-item" data-action="back">⬅ Back</li>
-        <li class="menu-item" data-action="forward">➡ Forward</li>
-        <li class="menu-item" data-action="reload">🔄 Reload</li>
-        <hr />
-        <li class="menu-item" data-action="saveas">📋 Save as</li>
-        <li class="menu-item" data-action="print">📋 Print</li>
-        <li class="menu-item" data-action="copy">📋 Copy</li>
-        <li class="menu-item" data-action="paste">📄 Paste</li>
-        <hr />
-        <li class="menu-item" data-action="viewsource">    View source</li>
-        <li class="menu-item" data-action="inspect">🔍 Inspect</li>
-    </ul>
+    var temp = `<div id="customContextMenu" class="context-menu">
+        <ul>`
+    for(const button of includedListDetails){
+        temp += `<li class="menu-item" data-action="${button}">${button}</li>`
+    }
+    temp += `
+        </ul>
     </div>`;
     selected = window.getSelection().toString()
     activeElement = document.activeElement;
@@ -37,16 +47,16 @@ document.addEventListener("contextmenu", function (e) {
             let action = e.target.getAttribute("data-action");
 
             switch (action) {
-                case "back":
+                case "Back":
                     history.back();
                     break;
-                case "forward":
+                case "Forward":
                     history.forward();
                     break;
-                case "print":
+                case "Print":
                         window.print();
                     break;
-                case "saveas":
+                case "Save":
                         const htmlContent = document.documentElement.outerHTML; // Get full page HTML
                         const blob = new Blob([htmlContent], { type: "text/html" });
                         const url = URL.createObjectURL(blob);
@@ -59,16 +69,16 @@ document.addEventListener("contextmenu", function (e) {
                         URL.revokeObjectURL(url);        
                     
                         break;    
-                case "reload":
+                case "Reload":
                         location.reload();
                         break;
-                case "copy":
+                case "Copy":
                     const text =window.getSelection().toString()
                     if(selected){
                         navigator.clipboard.writeText(selected)
                     }
                     break;
-                case "paste":
+                case "Paste":
                         navigator.clipboard.readText().then((pasteText) => {
                         if (!pasteText) return;
                 
@@ -85,13 +95,13 @@ document.addEventListener("contextmenu", function (e) {
                         }
                     })
                     break;
-                case "viewsource":
+                case "Source":
                     // Open pop up telling them keys as this is programatically impossible
 
                     alert("Press Ctrl + U to view source");
 
                     break;
-                case "inspect":
+                case "Inspect":
                     // Open pop up telling them keys as this is programatically impossible
                     alert("Press F12 or Ctrl+Shift+I (Cmd+Option+I on Mac) to open DevTools.");
 

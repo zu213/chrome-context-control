@@ -1,17 +1,18 @@
 {
-    "name": "Hello Extensions",
-    "description": "Base Level Extension",
+    "name": "Chrome context control",
+    "description": "Edit Chromes right clikc context menu",
     "version": "1.0",
     "manifest_version": 3,
     "action": {
-      "default_popup": "hello.html",
+      "default_title": "Chrome context control",
       "default_icon": "icon.png"
     },
     "permissions": [
       "contextMenus",
       "storage",
       "clipboardRead",
-      "clipboardWrite"
+      "clipboardWrite",
+      "tabs"
     ],
     "background": {
         "service_worker": "background.js",
