@@ -5,14 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chrome context control</title>
     <link rel="stylesheet" href="landingPage.css">
+    <link rel="icon" href="./icon.png" type="image/x-icon">
 </head>
 <body>
     <script src="landingPage.js"></script>
 
     <h2>Chrome context control</h2>
+    <div class="intro-text">
+        Welcome to Chrome context control! here you are able to drag around what is included/excluded 
+        on your right click (context menu), you are also able to rearragne them to fit your needs.
+    </div>
     <div>
         <div class="list-container">
-            <div class="list-container-title">Included</div>
+            <div class="list-container-title">
+                Included
+                <button class="primary-button action-button" id="addHrButton"><div>+</div></button>
+            </div>
             <ul id="included" class="sortable-list">
             </ul>
         </div>
@@ -23,7 +31,7 @@
         </div>
     </div>
 
-    <button id="saveButton">Save</button>
+    <button class="primary-button" id="saveButton">Save</button>
     <button id="resetButton">Reset</button>
 
 

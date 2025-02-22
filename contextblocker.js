@@ -21,14 +21,18 @@ document.addEventListener("contextmenu", async function (e) {
     includedListDetails = await getStorageValue("chromeContextControlIncluded")
     console.log(includedListDetails)
     if(!includedListDetails){
-        includedListDetails = ['Back', 'Forward', 'Reload','Save','Print','Copy','Paste','Source','Inspect'];
+        includedListDetails = ['Back', 'Forward', 'Reload', 'hr' , 'Save','Print','Copy','Paste', 'hr','Source','Inspect'];
     }
 
     // Add the inital context menu element (this is what will change depending on customisation)
     var temp = `<div id="customContextMenu" class="context-menu">
         <ul>`
     for(const button of includedListDetails){
-        temp += `<li class="menu-item" data-action="${button}">${button}</li>`
+        if(button == 'hr'){
+            temp += `<hr />`
+        }else {
+            temp += `<li class="menu-item" data-action="${button}">${button}</li>`
+        }
     }
     temp += `
         </ul>

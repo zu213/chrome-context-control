@@ -1,3 +1,5 @@
+/** General styles **/
+
 body {
     font-family: 'Poppins', sans-serif;
     padding: 20px;
@@ -8,11 +10,45 @@ body {
 h2 {
     font-size: 1.8em;
     margin: 7px;
+    text-decoration: underline;
+}
+
+button {
+  background-color: #FFFFFF;
+  border: 0;
+  border-radius: .5rem;
+  box-sizing: border-box;
+  font-size: .875rem;
+  width: 100px;
+  line-height: 1.25rem;
+  padding: .75rem 1rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+button:hover {
+  background-color: rgb(249,250,251);
+}
+
+button:active {
+    transform: scale(0.98);
+}
+/** Classes **/
+
+.intro-text {
+    width: 80%;
+    position: relative;
+    left: 10%;
+    text-align:justify;
+    padding: 10px 0;
 }
 
 .list-container {
     display: inline-block;
-    border: thick double #32a1ce;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
     height: 100%;
     padding: 10px;
     margin: 20px;
@@ -29,23 +65,22 @@ h2 {
 .sortable-list {
     display: inline-block;
     list-style: none;
-    padding: 0;
+    padding: 10px;
     width: 350px;
     margin: auto;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    border: 1px solid #000000;
     min-height: 300px;
 }
+
 .sortable-item {
     position: relative;
     top: 0;
     padding: 10px 20px;
     margin: 8px 0;
-    background: rgba(255, 255, 255, 0.8);
     border-radius: 5px;
     font-size: 0.9em;
-    color: #333;
     font-weight: bold;
     cursor: grab;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -54,11 +89,44 @@ h2 {
     background: #e8f0ff;
     transform: scale(1.03);
 }
+
 .dragging {
     opacity: 0.7;
     transform: rotate(-2deg);
 }
-.over {
-    border: 2px dashed #ff8c42;
-    background: #fff3e0;
+
+.primary-button {
+    background-color: #1d2dbc;
+    color: white;
+}
+.primary-button:hover {
+    background-color: #1a29ad;
+}
+
+.action-button {
+    width: 20px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    text-align: right;
+    border-radius: 20px;
+    height: 20px;
+    padding: 0;
+}
+.action-button div {
+    align-items: center;
+    vertical-align: middle;
+    position: absolute;
+    top: 0.5px;
+    left:6px;
+}
+
+.delete-button{
+    top: 7px;
+}
+.delete-button div {
+    top: -0.5px;
+    left: 6px;
+    font-size: small;
+    padding: 0;
 }

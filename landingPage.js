@@ -1,10 +1,15 @@
 let draggingItem = null;
-var includedListDetails;// = localStorage.getItem("chromeContextControlIncluded")?.split(',');
-var excludedListDetails;// = localStorage.getItem("chromeContextControlExcluded")?.split(',');
+var includedListDetails;
+var excludedListDetails;
 
+const cross = `<svg width="8" height="8" viewBox="0 0 8 8" xmlns="http://www.w3.org/2000/svg">
+  <line x1="1" y1="1" x2="7" y2="7" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <line x1="7" y1="1" x2="1" y2="7" stroke="white" stroke-width="2" stroke-linecap="round"/>
+</svg>
 
+`
 
-const defaultIncludedListDetails = ['Back', 'Forward', 'Reload','Save','Print','Copy','Paste','Source','Inspect']
+const defaultIncludedListDetails = ['Back', 'Forward', 'Reload', 'hr' , 'Save','Print','Copy','Paste', 'hr','Source','Inspect'];
 
 window.addEventListener('load', async function () {
 
@@ -12,7 +17,7 @@ window.addEventListener('load', async function () {
     excludedListDetails = await getStorageValue("chromeContextControlExcluded");
 
     populateLists()
-    // Add lsit event listeners
+    // Add liit event listeners
     document.querySelectorAll('.sortable-list').forEach(list => {
         list.addEventListener('dragover', event => {
             event.preventDefault();
@@ -31,6 +36,7 @@ window.addEventListener('load', async function () {
         });
     });
 
+    // Buttons have to be done this way for chrome
     document.getElementById("saveButton").addEventListener("click", function() {
         saveMenu()
     });
@@ -38,9 +44,14 @@ window.addEventListener('load', async function () {
     document.getElementById("resetButton").addEventListener("click", function() {
         resetToDefault()
     });
+
+    document.getElementById("addHrButton").addEventListener("click", function() {
+        addNewListItem(document.getElementById('included'),'hr')
+    });
 })
 
 function addItemToList(list, item, y){
+    // insert the element above where you hovered
     const listItems = list.querySelectorAll('.sortable-item')
     var chosenItem;
     for(const listItem of listItems){
@@ -62,7 +73,6 @@ function addItemListeners(item) {
         event.dataTransfer.setData('text/plain', event.target.outerHTML);
         event.target.classList.add('dragging');
     });
-
 }
 
 function addNewListItem(list, details) {
@@ -73,10 +83,16 @@ function addNewListItem(list, details) {
     `
     <div>
         ${details}
+        ${details == 'hr' ? `<button id="deleteButton" class="primary-button action-button delete-button"><div>${cross}</div></button>` : ''}
     </div>
     `
     addItemListeners(element)
     list.appendChild(element)
+    if(details == 'hr'){
+        element.addEventListener("click", function() {
+            element.remove()
+        })
+    }
 }
 
 function populateLists() {
@@ -103,27 +119,18 @@ function populateLists() {
 function saveMenu() {
     const included = Array.from(document.getElementById('included').querySelectorAll('.sortable-item')).map(e => e.textContent.trim())
     const excluded = Array.from(document.getElementById('excluded').querySelectorAll('.sortable-item')).map(e => e.textContent.trim())
-    console.log(included, excluded)
     chrome.storage.local.set({ chromeContextControlExcluded: excluded }, function() {
-        console.log('Data saved: fruit = apples,bananas');
+        console.log(`Data saved: chromeContextControlExcluded = {${excluded}}`);
     });
     chrome.storage.local.set({ chromeContextControlIncluded: included }, function() {
-        console.log('Data saved: fruit = apples,bananas');
+        console.log(`Data saved: chromeContextControlIncluded = {${included}}`);
     });
-
-    //localStorage.setItem("chromeContextControlExcluded", excluded)
-    //localStorage.setItem("chromeContextControlIncluded", included)
 }
 
 function resetToDefault() {
-    chrome.storage.local.remove(['chromeContextControlExcluded'], function() {
-        console.log('fruit key has been removed');
-    });
-    chrome.storage.local.remove(['chromeContextControlIncluded'], function() {
-        console.log('fruit key has been removed');
-    });
-    //localStorage.removeItem("chromeContextControlExcluded")
-    //localStorage.removeItem("chromeContextControlIncluded")
+    chrome.storage.local.remove(['chromeContextControlExcluded']);
+    chrome.storage.local.remove(['chromeContextControlIncluded']);
+    window.location.reload();
 }
 
 async function getStorageValue(key) {
@@ -132,7 +139,7 @@ async function getStorageValue(key) {
             if (chrome.runtime.lastError) {
                 reject(chrome.runtime.lastError);
             } else {
-                resolve(result[key]); // Resolve with the stored value
+                resolve(result[key]);
             }
         });
     });

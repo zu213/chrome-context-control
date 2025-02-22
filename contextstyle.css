@@ -3,8 +3,8 @@
     position: absolute;
     background: #fff;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    border-radius: 5px;
-    min-width: 200px;
+    border-radius: 10px;
+    min-width: 250px;
     font-family: Arial, sans-serif;
     z-index: calc(infinity);
     user-select: none;
@@ -12,7 +12,7 @@
 
 .context-menu ul {
     list-style: none;
-    padding: 5px 0;
+    padding: 10px 0;
     margin: 0;
 }
 
@@ -22,6 +22,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    font-size: small;
 }
 
 .context-menu .menu-item:hover {
