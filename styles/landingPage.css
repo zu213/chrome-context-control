@@ -140,6 +140,9 @@ button:active {
 
 .page-divider {
     margin: 25px 0;
+    width: 90%;
+    position: relative;
+    left: 5%;
 }
 
 .code-area {

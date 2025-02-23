@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chrome context control</title>
-    <link rel="stylesheet" href="landingPage.css">
-    <link rel="icon" href="./icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="./styles/landingPage.css">
+    <link rel="icon" href="./media/icon.png" type="image/x-icon">
 </head>
 <body>
-    <script src="landingPage.js"></script>
+    <script src="./scripts/landingPage.js"></script>
 
     <h2>Chrome context control</h2>
     <div class="intro-text">
@@ -25,7 +25,9 @@
             </ul>
         </div>
         <div class="list-container">
-            <div class="list-container-title">Excluded</div>
+            <div class="list-container-title">
+                Excluded
+            </div>
             <ul id="excluded" class="sortable-list">
             </ul>
         </div>
@@ -37,6 +39,9 @@
     <hr class="page-divider" />
 
     <h3>Add you're own option</h3>
+    <div class="intro-text">Add you're own custom keys by typing the key text in the box below and then 
+        the code you want it to run. It will run the code in a worker file when the option is clicked.
+    </div>
 
     <pre contenteditable="true" id="codeKey" class="key-area">Write key here...</pre>
     <pre contenteditable="true" id="codeEditor" class="code-area">Write code here...</pre>

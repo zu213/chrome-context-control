@@ -5,7 +5,7 @@
     "manifest_version": 3,
     "action": {
       "default_title": "Chrome context control",
-      "default_icon": "icon.png"
+      "default_icon": "./media/icon.png"
     },
     "permissions": [
       "contextMenus",
@@ -15,14 +15,14 @@
       "tabs"
     ],
     "background": {
-        "service_worker": "background.js",
+        "service_worker": "./scripts/background.js",
         "type": "module"
     },
     "content_scripts": [
         {
           "matches": ["<all_urls>"],
-          "js": ["contextblocker.js"],
-          "css": ["contextstyle.css"],
+          "js": ["./scripts/contextblocker.js"],
+          "css": ["./styles/contextstyle.css"],
           "all_frames": true,
           "match_about_blank": true
         }

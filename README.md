@@ -20,6 +20,8 @@ To start devloping/using a basic chrome extension I recommend this guide here: h
 
 This sets up an extension where you can add something to the context menu.
 
-### Footnotes
 
-I also recommend removing "Search with Google Lens" from teh basic context menu bu vising Chrome://flags then searching for lens, and setting Lens overlay to disabled.
+### Future
+- TODO: Add delete for custom functions
+- TODO: Add check for duplicate custom fucntions
+- TODO: Make it scrollable.
