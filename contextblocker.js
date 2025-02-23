@@ -19,7 +19,6 @@ document.addEventListener("contextmenu", async function (e) {
     e.preventDefault(); // Stop default right-click menu
     var includedListDetails;
     includedListDetails = await getStorageValue("chromeContextControlIncluded")
-    console.log(includedListDetails)
     if(!includedListDetails){
         includedListDetails = ['Back', 'Forward', 'Reload', 'hr' , 'Save','Print','Copy','Paste', 'hr','Source','Inspect'];
     }
@@ -45,7 +44,7 @@ document.addEventListener("contextmenu", async function (e) {
 
 
     document.getElementById("customContextMenu")
-        .addEventListener("click", (e) => 
+        .addEventListener("click", async (e) => 
         {
             // Do the correct action depending on the button
             let action = e.target.getAttribute("data-action");
@@ -109,8 +108,34 @@ document.addEventListener("contextmenu", async function (e) {
                     // Open pop up telling them keys as this is programatically impossible
                     alert("Press F12 or Ctrl+Shift+I (Cmd+Option+I on Mac) to open DevTools.");
 
-                    console.log('	Command + Option + I	F12 or Control + Shift + I')
+                    console.log('Command + Option + I	F12 or Control + Shift + I')
                     break;
+                default:
+                    // Otherwise we run the custom code using a worker.
+                    const command = await getStorageValue(action)
+                    const workerCode = `
+                        onmessage = function(e) {
+                            const code = e.data;
+                            try {
+                                eval(code); 
+                                postMessage('Code executed successfully');
+                            } catch (err) {
+                                postMessage('Error executing code: ' + err.message);
+                            }
+                        };
+                        `;
+
+                    const workerBlob = new Blob([workerCode], { type: 'application/javascript' });
+                    const worker = new Worker(URL.createObjectURL(workerBlob));
+
+                    // Send dynamic JavaScript code as a string to the worker
+                    worker.postMessage(command);
+                    worker.onmessage = function(e) {
+                        console.log(e.data);  // This will log 'Code executed successfully' or any errors
+                    };
+                    worker.onerror = function(error) {
+                        console.error(`Worker error: ${error.message}`);
+                    };
             }
         });
 

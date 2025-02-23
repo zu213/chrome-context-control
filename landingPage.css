@@ -7,9 +7,14 @@ body {
     color: #000000;
     text-align: center;
 }
+
 h2 {
     font-size: 1.8em;
     margin: 7px;
+    text-decoration: underline;
+}
+
+h3 {
     text-decoration: underline;
 }
 
@@ -129,4 +134,31 @@ button:active {
     left: 6px;
     font-size: small;
     padding: 0;
+}
+
+/** adding code **/
+
+.page-divider {
+    margin: 25px 0;
+}
+
+.code-area {
+    position: relative;
+    left: 15%;
+    width: 70%;
+    border:1px solid #ccc;
+    padding:10px;
+    min-height:100px;
+    font-family:monospace;
+    text-align: left;
+}
+
+.key-area {
+    height: 15px;
+    position: relative;
+    left: 15%;
+    width: 70%;
+    border:1px solid #ccc;
+    padding:10px;
+    text-align: left;
 }

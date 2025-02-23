@@ -5,9 +5,7 @@ var excludedListDetails;
 const cross = `<svg width="8" height="8" viewBox="0 0 8 8" xmlns="http://www.w3.org/2000/svg">
   <line x1="1" y1="1" x2="7" y2="7" stroke="white" stroke-width="2" stroke-linecap="round"/>
   <line x1="7" y1="1" x2="1" y2="7" stroke="white" stroke-width="2" stroke-linecap="round"/>
-</svg>
-
-`
+</svg>`
 
 const defaultIncludedListDetails = ['Back', 'Forward', 'Reload', 'hr' , 'Save','Print','Copy','Paste', 'hr','Source','Inspect'];
 
@@ -17,7 +15,7 @@ window.addEventListener('load', async function () {
     excludedListDetails = await getStorageValue("chromeContextControlExcluded");
 
     populateLists()
-    // Add liit event listeners
+    // Add list event listeners
     document.querySelectorAll('.sortable-list').forEach(list => {
         list.addEventListener('dragover', event => {
             event.preventDefault();
@@ -47,6 +45,10 @@ window.addEventListener('load', async function () {
 
     document.getElementById("addHrButton").addEventListener("click", function() {
         addNewListItem(document.getElementById('included'),'hr')
+    });
+
+    document.getElementById("submitButton").addEventListener("click", function() {
+        submitItem()
     });
 })
 
@@ -143,4 +145,24 @@ async function getStorageValue(key) {
             }
         });
     });
+}
+
+async function submitItem() {
+    const key = document.getElementById('codeKey').textContent;
+    const code = document.getElementById('codeEditor').textContent;
+    const obj = {};
+    obj[key] = code;
+    chrome.storage.local.set(obj, function() {
+        console.log(`Data saved: chromeContextControl${key} = {${code}}`);
+    });
+    var existingKeys = await getStorageValue("chromeContextControlKeys");
+    if(existingKeys){
+        existingKeys += `,${key}`
+    } else {
+        existingKeys = key
+    }
+    chrome.storage.local.set({chromeContextControlKeys: existingKeys}, function() {
+        console.log(`Data saved: chromeContextControl${key} = {${code}}`);
+    });
+    addNewListItem(document.getElementById('included'), key)
 }
