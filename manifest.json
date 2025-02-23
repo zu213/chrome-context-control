@@ -5,7 +5,10 @@
     "manifest_version": 3,
     "action": {
       "default_title": "Chrome context control",
-      "default_icon": "./media/icon.png"
+      "default_icon": "./media/icon48.png"
+    },
+    "icons": {
+      "48": "./media/icon48.png"
     },
     "permissions": [
       "contextMenus",

@@ -10,6 +10,7 @@
     font-family: 'Roboto', sans-serif;
     z-index: calc(infinity);
     user-select: none;
+    color: black;
 }
 
 .context-menu ul {
