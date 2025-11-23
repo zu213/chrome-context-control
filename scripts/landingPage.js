@@ -1,6 +1,7 @@
 let draggingItem = null;
 var includedListDetails;
 var excludedListDetails;
+var deleteableListDetails;
 
 const cross = `<svg width="8" height="8" viewBox="0 0 8 8" xmlns="http://www.w3.org/2000/svg">
   <line x1="1" y1="1" x2="7" y2="7" stroke="white" stroke-width="2" stroke-linecap="round"/>
@@ -12,6 +13,9 @@ const defaultIncludedListDetails = ['Back', 'Forward', 'Reload', 'hr' , 'Save','
 window.addEventListener('load', async function () {
     includedListDetails = await getStorageValue("chromeContextControlIncluded");
     excludedListDetails = await getStorageValue("chromeContextControlExcluded");
+    deleteableListDetails = await getStorageValue("chromeContextControlDeleteable");
+
+    console.log(includedListDetails)
 
     populateLists();
     // Add list event listeners for dragging
@@ -86,15 +90,16 @@ function addNewListItem(list, details) {
     element.innerHTML = `
     <div>
         ${details}
-        ${details == 'hr' ? `<button id="deleteButton" class="primary-button action-button delete-button"><div>${cross}</div></button>` : ''}
+        ${details === 'hr' || deleteableListDetails?.includes(details) ? `<button id="deleteButton" class="primary-button action-button delete-button"><div>${cross}</div></button>` : ''}
     </div>`;
     addItemListeners(element);
     list.appendChild(element);
-    if(details == 'hr'){
-        element.addEventListener("click", function() {
+    list.querySelectorAll('.delete-button').forEach(e => {
+        e?.addEventListener("click", function() {
             element.remove();
         })
-    }
+    })
+    
 }
 
 async function getStorageValue(key) {
@@ -114,6 +119,10 @@ function populateLists() {
     const includedList = document.getElementById('included');
     const excludedList = document.getElementById('excluded');
     // If they have no existing local storage populate with
+    console.log(includedListDetails, excludedListDetails, deleteableListDetails)
+    if(deleteableListDetails == null) {
+        deleteableListDetails = []
+    }
     if(includedListDetails == null || excludedListDetails == null) {
         for(i of defaultIncludedListDetails){
             addNewListItem(includedList, i);
@@ -132,13 +141,13 @@ function populateLists() {
 
 // button functions
 function saveMenu() {
-    const included = Array.from(document.getElementById('included').querySelectorAll('.sortable-item')).map(e => e.textContent.trim());
-    const excluded = Array.from(document.getElementById('excluded').querySelectorAll('.sortable-item')).map(e => e.textContent.trim());
-    chrome.storage.local.set({ chromeContextControlExcluded: excluded }, function() {
-        console.log(`Set chromeContextControlExcluded = {${excluded}}`);
+    includedListDetails = Array.from(document.getElementById('included').querySelectorAll('.sortable-item')).map(e => e.textContent.trim());
+    excludedListDetails = Array.from(document.getElementById('excluded').querySelectorAll('.sortable-item')).map(e => e.textContent.trim());
+    chrome.storage.local.set({ chromeContextControlExcluded: excludedListDetails }, function() {
+        console.log(`Set chromeContextControlExcluded = {${excludedListDetails}}`);
     });
-    chrome.storage.local.set({ chromeContextControlIncluded: included }, function() {
-        console.log(`Set chromeContextControlIncluded = {${included}}`);
+    chrome.storage.local.set({ chromeContextControlIncluded: includedListDetails }, function() {
+        console.log(`Set chromeContextControlIncluded = {${includedListDetails}}`);
     });
 }
 
@@ -152,19 +161,25 @@ async function submitItem() {
     const key = document.getElementById('codeKey').textContent;
     const code = document.getElementById('codeEditor').textContent;
     const obj = {};
-    obj[key] = code;
+    obj[`chromeContextControl-${key}`] = code;
     chrome.storage.local.set(obj, function() {
         console.log(`New context code saved`);
     });
-    var existingKeys = await getStorageValue("chromeContextControlKeys");
-    if(existingKeys){
-        existingKeys += `,${key}`;
-    } else {
-        existingKeys = key;
-    }
-    chrome.storage.local.set({chromeContextControlKeys: existingKeys}, function() {
-        console.log(`New context key saved: ${key}`);
+    deleteableListDetails.push(key)
+    console.log(deleteableListDetails)
+    chrome.storage.local.set({ chromeContextControlDeleteable: deleteableListDetails }, function() {
+        console.log(`Set chromeContextControlDeleteable = {${deleteableListDetails}}`);
     });
+    // var existingKeys = await getStorageValue("chromeContextControlKeys");
+    // if(existingKeys){
+    //     existingKeys += `,${key}`;
+    // } else {
+    //     existingKeys = key;
+    // }
+    // console.log(existingKeys)
+    // chrome.storage.local.set({chromeContextControlKeys: existingKeys}, function() {
+    //     console.log(`New context key saved: ${key}`);
+    // });
     addNewListItem(document.getElementById('included'), key);
     saveMenu();
 }

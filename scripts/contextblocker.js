@@ -101,7 +101,7 @@ document.addEventListener("contextmenu", async function (e) {
                     break;
                 default:
                     // Otherwise we run the custom code using a worker.
-                    const command = await getStorageValue(action);
+                    const command = await getStorageValue(`chromeContextControl-${action}`);
                     const workerCode = `
                         onmessage = function(e) {
                             const code = e.data;
