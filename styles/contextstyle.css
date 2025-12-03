@@ -11,6 +11,9 @@
     z-index: calc(infinity);
     user-select: none;
     color: black;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    max-height: 100%;
 }
 
 .context-menu ul {
@@ -36,4 +39,8 @@
     margin: 5px 0;
     border: none;
     border-top: 0.5px solid #ddd;
+}
+
+.menu-item.disabled {
+    color: gray;
 }

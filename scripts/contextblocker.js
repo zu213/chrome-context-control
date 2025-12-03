@@ -17,8 +17,8 @@ async function getStorageValue(key) {
 
 document.addEventListener("contextmenu", async function (e) {
     e.preventDefault(); // Stop default right-click menu
-    var includedListDetails;
-    includedListDetails = await getStorageValue("chromeContextControlIncluded");
+    var includedListDetails = await getStorageValue("chromeContextControlIncluded");
+    let hasCopied = (await navigator.clipboard.readText()).length > 0
     if(!includedListDetails){
         includedListDetails = ['Back', 'Forward', 'Reload', 'hr' , 'Save','Print','Copy','Paste', 'hr','Source','Inspect'];
     }
@@ -29,7 +29,7 @@ document.addEventListener("contextmenu", async function (e) {
         if(button == 'hr'){
             temp += `<hr />`;
         }else {
-            temp += `<li class="menu-item" data-action="${button}">${button}</li>`;
+            temp += `<li class="menu-item ${button == 'Paste' && !hasCopied ? 'disabled' : ''}" data-action="${button}" disabled="${button == 'Paste' && !hasCopied}">${button}</li>`;
         }
     }
     temp += `</ul></div>`;
@@ -128,8 +128,20 @@ document.addEventListener("contextmenu", async function (e) {
 
     // Position the element correctly
     let menu = document.getElementById("customContextMenu");
-    menu.style.left = `${e.pageX}px`;
-    menu.style.top = `${e.pageY}px`;
+    const menuWidth = menu.offsetWidth;
+    const menuHeight = menu.offsetHeight;
+
+    let x = e.pageX
+    let y = e.pageY
+    if (x > window.innerWidth / 2) {
+        x = x - menuWidth;
+    }
+    if (y > window.innerHeight / 2) {
+        y = y - menuHeight;
+    }
+
+    menu.style.left = `${x}px`;
+    menu.style.top = `${y}px`;
     menu.style.display = "block";
 });
 
