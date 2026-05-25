@@ -1,17 +1,16 @@
 {
-    "name": "Chrome context control",
-    "description": "Edit Chromes right clikc context menu",
+    "name": "Context control",
+    "description": "Edit the right click context menu",
     "version": "1.0",
     "manifest_version": 3,
     "action": {
-      "default_title": "Chrome context control",
-      "default_icon": "./media/icon48.png"
+      "default_title": "Context control",
+      "default_icon": "media/icon48.png"
     },
     "icons": {
-      "48": "./media/icon48.png"
+      "48": "media/icon48.png"
     },
     "permissions": [
-      "contextMenus",
       "storage",
       "clipboardRead",
       "clipboardWrite",
